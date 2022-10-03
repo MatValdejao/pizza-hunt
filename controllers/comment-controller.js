@@ -31,6 +31,31 @@ const commentController = {
 			});
 	},
 
+	addReply({ params, body }, res) {
+		Comment.findOneAndUpdate(
+			{
+				_id: params.commentId,
+			},
+			{
+				$push: { replies: body },
+			},
+			{
+				new: true,
+			}
+		)
+			.then((dbPizzaData) => {
+				if (!dbPizzaData) {
+					res.status(404).json({ message: "No comment with that id" });
+					return;
+				}
+				res.json(dbPizzaData);
+			})
+			.catch((err) => {
+				console.log(err);
+				res.status(400).json(err);
+			});
+	},
+
 	// remove comment
 	removeComment({ params }, res) {
 		Comment.findOneAndDelete({
@@ -58,6 +83,28 @@ const commentController = {
 				console.log(err);
 				res.status(400).json(err);
 			});
+	},
+
+	removeReply({ params }, res) {
+		Comment.findOneAndUpdate(
+			{
+				_id: params.commentId,
+			},
+			{
+				$pull: { replies: { replyId: params.replyId } },
+			},
+			{
+				new: true,
+			}
+		)
+			.then((removeReply) => {
+				if (!removeReply) {
+					P;
+					res.status(404).json({ message: "No comment with this id" });
+					return;
+				}
+			})
+			.catch((err) => res.json(err));
 	},
 };
 
