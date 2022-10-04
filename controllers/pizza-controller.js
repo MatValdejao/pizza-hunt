@@ -56,7 +56,8 @@ const pizzaController = {
 			},
 			body,
 			{
-				new: true,
+                new: true,
+                runValidators: true,
 			}
 		)
 			.then((dbPizzaData) => {
